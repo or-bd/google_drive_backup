@@ -1,0 +1,8 @@
+{
+  "backupDays": 20,
+  "directoryId": "<google-drive-directory-id>",
+  "DirectoriesBackup": [
+    "/var/www/...",
+    "/Users/Downloads/..."
+  ]
+}
