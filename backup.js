@@ -17,6 +17,8 @@ const backup = async () => {
   throw `Failed to upload '${zip.name}'`;
 };
 
+console.log(`\n--- Google Drive Backup ---\n`);
+
 backup()
   .then((zipName) => {
     console.log(`'${zipName}' uploaded successfully!`);

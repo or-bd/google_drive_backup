@@ -29,6 +29,8 @@ const getAccessToken = (oAuth2Client) => {
           if (e) return console.error(e);
           console.log('Token stored to', TOKEN_PATH);
         });
+
+        console.log('- Google client authorization success.');
         resolve(oAuth2Client);
       });
     });
@@ -44,6 +46,7 @@ const authorize = (credentials) => {
   try {
     const token = require(TOKEN_PATH);
     oAuth2Client.setCredentials(token);
+    console.log('- Google client authorization success.');
     return oAuth2Client;
   } catch (e) {
     return getAccessToken(oAuth2Client);

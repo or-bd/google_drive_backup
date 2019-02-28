@@ -10,5 +10,7 @@ module.exports = {
     "no-console": "off",
     "camelcase": "off",
     "global-require": "off",
+    "no-throw-literal": "off",
+    "quotes": "off",
   }
 };

@@ -14,11 +14,13 @@ const getAll = (auth) => {
     q: `'${directoryId}' in parents`,
   };
 
+  console.log('- Getting all existing backups from Google Drive...');
   return new Promise((resolve, reject) => {
     service.files.list(options, (err, response) => {
       if (err) {
         return reject(`GoogleDrive 'getAll' failed: ${err.message}`);
       }
+      console.log(`- ${response.data.files.length} backups found.`);
       resolve(response.data.files);
     });
   });
@@ -38,12 +40,23 @@ const upload = (auth, zip) => {
     },
   };
 
+  console.log('- Uploading zip file to Google Drive...');
   return new Promise((resolve, reject) => {
     service.files.create(options, (err, response) => {
       if (err) {
-        return reject(`GoogleDrive 'upload' failed: ${err.message}`);
+        return reject(`Google Drive 'upload' failed: ${err.message}`);
       }
-      fs.unlink(zip.path);
+
+      console.log('- Zip file uploaded successfully to Google Drive.');
+
+      fs.unlink(zip.path, (fsErr) => {
+        if (err) {
+          console.log(`- Failed deleting local zip file - ${fsErr.message}`);
+        } else {
+          console.log('- Local Zip file was deleted.');
+        }
+      });
+
       resolve(response.data);
     });
   });
@@ -61,6 +74,8 @@ const findOldBackups = (backups) => {
       old.push(backups[i].id);
     }
   }
+
+  console.log(`- ${old.length} old backups found.`);
   return old;
 };
 
@@ -68,6 +83,7 @@ const remove = (auth, backups) => {
   const service = google.drive({ version: 'v3', auth });
 
   for (let i = 0; i < backups.length; i++) {
+    console.log(`- Deleting old backup id '${backups[i]}'...`);
     service.files.delete({ fileId: backups[i] });
   }
 };

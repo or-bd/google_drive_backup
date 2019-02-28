@@ -6,6 +6,7 @@ const archive = archiver('zip', { zlib: { level: 9 } });
 const { DirectoriesBackup } = require('../config/settings.json');
 
 const getZippedFolders = () => {
+  console.log('- Start zipping folders....');
   const today = moment().format('DD_MM_YYYY');
   const zip = { name: `backup_${today}.zip` };
   zip.path = `${__dirname}/../${zip.name}`;
@@ -20,8 +21,14 @@ const getZippedFolders = () => {
   archive.finalize();
 
   return new Promise((resolve, reject) => {
-    output.on('close', () => resolve(zip));
-    archive.on('error', err => reject(err));
+    output.on('close', () => {
+      console.log('- Folders zip file created successfully.');
+      resolve(zip);
+    });
+    archive.on('error', (err) => {
+      console.log(`- Failed to create folders zip file - ${err.message}`);
+      reject(err);
+    });
   });
 };
 
